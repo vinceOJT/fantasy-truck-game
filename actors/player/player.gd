@@ -1,28 +1,23 @@
-class_name Player
-extends Actor
+extends CharacterBody2D
 
+@export var speed: float = 250.0
 
-@onready var sprite : Sprite2D = $Sprite2D
-@onready var state_machine : StateMachine = $StateMachine
+func _physics_process(_delta):
+	var input_dir := Vector2.ZERO
 
+	# Read input
+	input_dir.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+	input_dir.y = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 
-func _ready() -> void:
-	anim_tree.active = true
+	# Movement
+	if input_dir.length() > 0:
+		input_dir = input_dir.normalized()
+		velocity = input_dir * speed
+	else:
+		velocity = Vector2.ZERO
 
+	move_and_slide()
 
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("attack"):
-		state_machine.change_state("Attack")
-
-
-func get_direction() -> Vector2:
-	return Input.get_vector("move_left", "move_right", "move_up", "move_down")
-
-
-func _on_health_health_depleted() -> void:
-	is_alive = false
-	# TODO How can I use anim_state here?
-	anim_tree.active = false
-	anim_player.play("death")
-	await anim_player.animation_finished
-	queue_free()
+	# Rotate car to face movement direction
+	if velocity.length() > 0:
+		rotation = velocity.angle() + PI / 2
