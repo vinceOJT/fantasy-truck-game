@@ -1,10 +1,10 @@
 [gd_scene load_steps=19 format=3 uid="uid://cadl6hjl3d2cy"]
 
 [ext_resource type="Script" uid="uid://bsypm37xvhags" path="res://actors/player/player.gd" id="1_22mku"]
-[ext_resource type="Texture2D" uid="uid://dv63rd182nyc6" path="res://assets/sprites/cars/Audi.png" id="2_6p1w3"]
+[ext_resource type="Texture2D" uid="uid://g3yfviv7h8kx" path="res://assets/player/truck_normal.png" id="2_ilk7j"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6p1w3"]
-size = Vector2(20, 42)
+size = Vector2(26, 48)
 
 [sub_resource type="Animation" id="Animation_ccv68"]
 length = 0.001
@@ -393,7 +393,7 @@ script = ExtResource("1_22mku")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -0.99999994)
 scale = Vector2(0.2, 0.2)
-texture = ExtResource("2_6p1w3")
+texture = ExtResource("2_ilk7j")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(2.08165e-12, -1)
