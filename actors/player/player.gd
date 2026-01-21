@@ -6,6 +6,7 @@ extends CharacterBody2D
 @onready var durability_bar := $CanvasLayer3/VBoxContainer/DurabilityBar
 @onready var boost_bar := $CanvasLayer3/VBoxContainer/BoostLabel
 @onready var shield_bar := $CanvasLayer3/VBoxContainer/ShieldLabel
+@onready var load_sprite: Sprite2D = $"Truck Sprite/Load Sprite"
 
 
 # --- Movement ---
@@ -122,12 +123,16 @@ func on_location_arrived(location: Location) -> void:
 		# Start quest upon arriving ang starting location
 		if current_quest.status == Quest.QuestStatus.READY and current_quest.starting_location == location:
 			current_quest.status = Quest.QuestStatus.ONGOING
+			if current_quest.type == Quest.QuestType.DELIVERY:
+				load_sprite.visible = true
+			else:
+				load_sprite.visible = false
 			print("Quest started")
-		
 		# End the quest
 		elif current_quest.status == Quest.QuestStatus.ONGOING and current_quest.end_location == location:
 			is_quest_completed = true
 			current_quest.status = Quest.QuestStatus.FINISHED
+			load_sprite.visible = false
 			print("Quest Completed!")
 			current_quest = null
 			# Generate new quest

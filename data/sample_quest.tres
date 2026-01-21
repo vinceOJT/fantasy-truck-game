@@ -7,7 +7,6 @@
 [resource]
 script = ExtResource("1_r6tnj")
 name = "Taxi Ride"
-type = 1
 starting_location = ExtResource("1_fnnvg")
 end_location = ExtResource("1_ymldw")
 time_limit = 7.0
