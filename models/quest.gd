@@ -8,7 +8,10 @@ enum QuestStatus {READY, ONGOING, FINISHED}
 @export var type: QuestType
 @export var starting_location: Location
 @export var end_location: Location
-@export var status: QuestStatus
+@export var status: QuestStatus:
+	set(new_status):
+		status = new_status
+		emit_changed()
 @export var time_limit: float
 
 func _init(

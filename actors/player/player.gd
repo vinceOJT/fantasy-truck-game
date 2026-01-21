@@ -23,13 +23,20 @@ var stats := {
 }
 
 # --- Quest ---
-var current_quest: Quest
+signal quest_changed(quest)
+var current_quest: Quest = null:
+	get:
+		return current_quest
+	set(quest):
+		quest_changed.emit(quest)
+		current_quest = quest
 var is_quest_completed := false
 
 # -----------------------
 func _ready() -> void:
 	# Example quest load
 	current_quest = preload("uid://c1k3rjn6sjhj3")
+	current_quest.changed.connect(_on_current_quest_changed)
 	print("Current Quest: " + current_quest.name)
 
 	# Initialize UI max values
@@ -120,7 +127,12 @@ func on_location_arrived(location: Location) -> void:
 		# End the quest
 		elif current_quest.status == Quest.QuestStatus.ONGOING and current_quest.end_location == location:
 			is_quest_completed = true
+			current_quest.status = Quest.QuestStatus.FINISHED
 			print("Quest Completed!")
 			current_quest = null
 			# Generate new quest
 			generate_quest(location)
+
+# Emit signal to update quest UI
+func _on_current_quest_changed():
+	quest_changed.emit(current_quest)
