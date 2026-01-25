@@ -17,7 +17,7 @@ extends CharacterBody2D
 @export var turn_speed: float = 2.0
 @export var reverse_speed: float = 100.0
 @export var reduce_gas: float = 0.0
-
+@export var is_gas_gone: bool = false
 
 # --- Player Stats ---
 var stats := {
@@ -48,7 +48,7 @@ func _ready() -> void:
 	durability_bar.max_value = 100
 	boost_bar.max_value = 100
 	shield_bar.max_value = 100
-	gas_bar.max_value = 1500
+	gas_bar.max_value = 1500.0
 
 	# Initial UI update
 	_update_ui()
@@ -57,10 +57,15 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	var throttle := Input.get_action_strength("ui_up") - Input.get_action_strength("ui_down")
 	var steering := Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+	
+	
 	var gas_reduction := (Input.get_action_strength("ui_up")  + Input.get_action_strength("ui_down"))
-	#var reduce :=  100 - throttle
 	reduce_gas += gas_reduction
+	#print(reduce_gas)
+	#var reduce :=  100 - throttle
 	#print(gas_reduction)
+
+	
 	
 	# Rotate only if moving
 	if velocity.length() > 5:
@@ -71,9 +76,10 @@ func _physics_process(delta: float) -> void:
 	# Apply boost multiplier
 	var effective_max_speed: float = max_speed * (1.0 + stats["boost"])
 	# Accelerate
+	if reduce_gas >= 1500.0:
+		throttle = 0
+		
 	if throttle != 0:
-		
-		
 		var target_speed = effective_max_speed if throttle > 0 else reverse_speed
 		velocity = velocity.move_toward(
 			forward * target_speed * throttle,
@@ -83,9 +89,10 @@ func _physics_process(delta: float) -> void:
 	else:
 		# Natural slowdown
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
-		
-		
-		
+	
+	
+	
+
 	move_and_slide()
 	
 	# Update HUD every frame
