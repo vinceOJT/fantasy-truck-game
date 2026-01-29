@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=4 uid="uid://csqlopx17cjh5"]
+[gd_scene load_steps=17 format=4 uid="uid://bdkumy0hsg5qy"]
 
 [ext_resource type="TileSet" uid="uid://dmr2mla7hhak0" path="res://assets/main_map_tileset.tres" id="1_whrjg"]
 [ext_resource type="Texture2D" uid="uid://cy7kca7y8p7ff" path="res://assets/environment/castle.png" id="2_1xo34"]
@@ -125,9 +125,6 @@ position = Vector2(10331, 4143)
 [node name="House A 7" parent="Houses" instance=ExtResource("6_2xk3c")]
 position = Vector2(9187, 3378)
 
-[node name="House A 9" parent="Houses" instance=ExtResource("6_2xk3c")]
-position = Vector2(6049, 467)
-
 [node name="House A 8" parent="Houses" instance=ExtResource("6_2xk3c")]
 position = Vector2(4815, 6447)
 
@@ -248,16 +245,6 @@ position = Vector2(10671, 6704)
 [node name="House B 12" parent="Houses" instance=ExtResource("10_ulx81")]
 position = Vector2(8908, 5505)
 
-[node name="House B 13" parent="Houses" instance=ExtResource("10_ulx81")]
-position = Vector2(9523, 6509)
-rotation = -1.5707964
-scale = Vector2(1.2, 1.2)
-
-[node name="House B 14" parent="Houses" instance=ExtResource("10_ulx81")]
-position = Vector2(10117, 6509)
-rotation = -1.5707964
-scale = Vector2(1.2, 1.2)
-
 [node name="House C 8" parent="Houses" instance=ExtResource("11_6adrn")]
 position = Vector2(10488, 5438)
 rotation = 3.1415927
@@ -286,14 +273,6 @@ scale = Vector2(1, -1)
 position = Vector2(3516, 5491)
 rotation = 4.712389
 
-[node name="House C 10" parent="Houses" instance=ExtResource("11_6adrn")]
-position = Vector2(2313, 8540)
-rotation = 4.712389
-
-[node name="House C 12" parent="Houses" instance=ExtResource("11_6adrn")]
-position = Vector2(1641, 11938)
-rotation = 3.1415927
-
 [node name="Small Tree" parent="Houses" instance=ExtResource("12_cyt25")]
 position = Vector2(4899, 7376)
 
@@ -304,6 +283,15 @@ rotation = 1.0471976
 [node name="Small Tree3" parent="Houses" instance=ExtResource("12_cyt25")]
 position = Vector2(8837, 6097)
 rotation = 2.3561945
+
+[node name="Small Tree7" parent="Houses" instance=ExtResource("12_cyt25")]
+position = Vector2(14194, 5469.0005)
+rotation = 3.403392
+
+[node name="Small Tree8" parent="Houses" instance=ExtResource("12_cyt25")]
+position = Vector2(16662, 8152)
+rotation = 3.403392
+scale = Vector2(1.2303752, 1.2303752)
 
 [node name="Small Tree5" parent="Houses" instance=ExtResource("12_cyt25")]
 position = Vector2(9624, 2712)
@@ -320,7 +308,7 @@ rotation = -1.0471976
 scale = Vector2(0.7815901, 0.7815901)
 
 [node name="Large Tree" parent="Houses" instance=ExtResource("11_cyt25")]
-position = Vector2(3158, 7423)
+position = Vector2(3335, 7258)
 
 [node name="Spiky Tree" parent="Houses" instance=ExtResource("11_rk4p5")]
 position = Vector2(10633, 7869)
@@ -474,6 +462,17 @@ texture = ExtResource("12_rk4p5")
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ice/Small Rock 2"]
 polygon = PackedVector2Array(138.19238, 90.86279, -24.800781, 162.10449, -87.93164, 165.89355, -138.43262, 110.95117, -155.85938, -21.057617, -133.99902, -94.916016, 2.9638672, -161.74463, 152.40039, -47.163086)
 
+[node name="Small Rock 3" type="StaticBody2D" parent="Ice"]
+position = Vector2(-2724.6113, -1973.1687)
+rotation = -0.7853982
+
+[node name="Sprite2D" type="Sprite2D" parent="Ice/Small Rock 3"]
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("12_rk4p5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ice/Small Rock 3"]
+polygon = PackedVector2Array(138.19238, 90.86279, -24.800781, 162.10449, -87.93164, 165.89355, -138.43262, 110.95117, -155.85938, -21.057617, -133.99902, -94.916016, 2.9638672, -161.74463, 152.40039, -47.163086)
+
 [node name="Forest" type="Node2D" parent="."]
 position = Vector2(13778, 11972)
 
@@ -620,3 +619,81 @@ scale = Vector2(1.8033718, 1.8033718)
 position = Vector2(-1960, -59)
 rotation = -3.6651917
 scale = Vector2(1.8033718, 1.8033718)
+
+[node name="Landmarks" type="Node2D" parent="."]
+
+[node name="Port Building" parent="Landmarks" instance=ExtResource("11_6adrn")]
+modulate = Color(0.74118394, 0.8528053, 1, 1)
+position = Vector2(1641, 11938)
+rotation = -3.1415925
+script = null
+
+[node name="Barn" parent="Landmarks" instance=ExtResource("6_2xk3c")]
+modulate = Color(1, 0.2902659, 0.24726292, 1)
+position = Vector2(6049, 467)
+script = null
+
+[node name="Marketplace" parent="Landmarks" instance=ExtResource("11_6adrn")]
+modulate = Color(0.30306324, 0.49699682, 0.37856072, 1)
+position = Vector2(2411, 8462)
+rotation = -1.5707964
+scale = Vector2(1.2, 1.2)
+script = null
+
+[node name="Marketplace 2" parent="Landmarks" instance=ExtResource("10_ulx81")]
+modulate = Color(0.30306324, 0.49699682, 0.37856072, 1)
+position = Vector2(2350, 7565)
+rotation = -1.5707964
+scale = Vector2(1.2, 1.2)
+script = null
+
+[node name="Library" parent="Landmarks" instance=ExtResource("10_ulx81")]
+modulate = Color(0.4748732, 0.38932568, 0.5044115, 1)
+position = Vector2(9523, 6509)
+rotation = -1.5707964
+scale = Vector2(1.2, 1.2)
+script = null
+
+[node name="Library2" parent="Landmarks" instance=ExtResource("10_ulx81")]
+modulate = Color(0.4748732, 0.38932568, 0.5044115, 1)
+position = Vector2(10117, 6509)
+rotation = -1.5707964
+scale = Vector2(1.2, 1.2)
+script = null
+
+[node name="Blacksmith" parent="Landmarks" instance=ExtResource("10_ulx81")]
+modulate = Color(0.21868312, 0.21188939, 0.21868744, 1)
+position = Vector2(10538, 315)
+scale = Vector2(1.2, 1.2)
+script = null
+
+[node name="Lumberjack" parent="Landmarks" instance=ExtResource("6_2xk3c")]
+modulate = Color(0.31828815, 0.24675545, 0.18780473, 1)
+position = Vector2(16549, 13328)
+scale = Vector2(1.5, 1.5)
+script = null
+
+[node name="Lumberjack2" parent="Landmarks" instance=ExtResource("10_ulx81")]
+modulate = Color(0.31828815, 0.24675545, 0.18780473, 1)
+position = Vector2(17379, 13345.999)
+rotation = -1.5707964
+scale = Vector2(0.8, 0.8)
+script = null
+
+[node name="Guild" parent="Landmarks" instance=ExtResource("6_2xk3c")]
+modulate = Color(0.77769226, 0.54523873, 0.15784863, 1)
+position = Vector2(15016, 6686)
+scale = Vector2(1.5, 1.5)
+script = null
+
+[node name="Guild2" parent="Landmarks" instance=ExtResource("10_ulx81")]
+modulate = Color(0.6596366, 0.4905823, 0.23364979, 1)
+position = Vector2(15828.001, 6748.0005)
+scale = Vector2(1.2, 1.2)
+script = null
+
+[node name="Guild3" parent="Landmarks" instance=ExtResource("10_ulx81")]
+modulate = Color(0.6596366, 0.4905823, 0.23364979, 1)
+position = Vector2(14206, 6748.0005)
+scale = Vector2(1.2, 1.2)
+script = null
