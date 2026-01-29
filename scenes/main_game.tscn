@@ -323,8 +323,8 @@ location_res = ExtResource("16_ihbck")
 
 [node name="Quest UI" parent="CanvasLayer" instance=ExtResource("17_vnsdt")]
 
-[node name="CharacterBody2D" parent="." instance=ExtResource("24_cybgu")]
-position = Vector2(2744, 2151)
+[node name="slime" parent="." instance=ExtResource("24_cybgu")]
+position = Vector2(2759, 2149)
 
 [connection signal="pressed" from="Player/CanvasLayer4/PauseMenu/Panel/VBoxContainer/resumeBtn" to="Player/CanvasLayer4/PauseMenu" method="_on_resume_btn_pressed"]
 [connection signal="pressed" from="Player/CanvasLayer4/PauseMenu/Panel/VBoxContainer/optionsBtn" to="Player/CanvasLayer4/PauseMenu" method="_on_options_btn_pressed"]

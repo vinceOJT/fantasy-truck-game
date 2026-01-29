@@ -2,6 +2,17 @@
 class_name Player
 extends CharacterBody2D
 
+# --- damage ---
+var enemy_in_range = false
+var enemy_attack_cooldown = false
+var health = 100
+var player_alive = true
+var damage_taken = 10
+var truck_damage = 0
+
+
+
+
 # --- UI References ---
 @onready var durability_bar := $CanvasLayer3/VBoxContainer/DurabilityBar
 @onready var boost_bar := $CanvasLayer3/VBoxContainer/BoostLabel
@@ -57,17 +68,18 @@ func _ready() -> void:
 
 # -----------------------
 func _physics_process(delta: float) -> void:
+	
 	var throttle := Input.get_action_strength("car_forward") - Input.get_action_strength("car_reverse")
 	var steering := Input.get_action_strength("car_right") - Input.get_action_strength("car_left")
+	slime_attack()
 
-	
-	
+	# Damages
+	# Gas Damage
 	var gas_reduction := (Input.get_action_strength("car_forward")  + Input.get_action_strength("car_reverse"))
 	reduce_gas += gas_reduction
-	#print(reduce_gas)
-	#var reduce :=  100 - throttle
-	#print(gas_reduction)
-
+	# Truck Damage
+	if (damage_taken % 50 == 0) :
+		truck_damage += 10
 	
 	
 	# Rotate only if moving
@@ -105,7 +117,7 @@ func _physics_process(delta: float) -> void:
 
 # -----------------------
 func _update_ui() -> void:
-	durability_bar.value = stats["durability"]
+	durability_bar.value = stats["durability"] - truck_damage
 	boost_bar.value = stats["boost"] * 100      # 0.0–1.0 -> 0–100%
 	shield_bar.value = stats["shield"] * 100
 	gas_bar.value = stats["gas"] - reduce_gas
@@ -171,3 +183,18 @@ func on_location_arrived(location: Location) -> void:
 # Emit signal to update quest UI
 func _on_current_quest_changed():
 	quest_changed.emit(current_quest)
+
+func player():
+	pass
+
+func _on_truck_hitbox_body_entered(body: Node2D) -> void:
+	if body.has_method("slime"):
+		enemy_in_range = true
+func _on_truck_hitbox_body_exited(body: Node2D) -> void:
+	if body.has_method("slime"):
+		enemy_in_range = false
+		
+func slime_attack():
+	if enemy_in_range:
+		damage_taken += 1
+		print(damage_taken)

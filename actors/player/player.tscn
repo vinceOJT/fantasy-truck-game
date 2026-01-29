@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cadl6hjl3d2cy"]
+[gd_scene load_steps=21 format=3 uid="uid://cadl6hjl3d2cy"]
 
 [ext_resource type="Script" uid="uid://bsypm37xvhags" path="res://actors/player/player.gd" id="1_22mku"]
 [ext_resource type="Texture2D" uid="uid://g3yfviv7h8kx" path="res://assets/player/truck_normal.png" id="2_ilk7j"]
@@ -386,6 +386,9 @@ _data = {
 &"walk_right": SubResource("Animation_jw06o")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ax26v"]
+size = Vector2(27, 49)
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 y_sort_enabled = true
 collision_layer = 2
@@ -418,3 +421,13 @@ limit_right = 7168
 limit_bottom = 5529
 limit_smoothed = true
 position_smoothing_enabled = true
+
+[node name="truck_hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="truck_hitbox"]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_ax26v")
+debug_color = Color(0.94474274, 5.390644e-06, 0.5979409, 0.41960785)
+
+[connection signal="body_entered" from="truck_hitbox" to="." method="_on_truck_hitbox_body_entered"]
+[connection signal="body_exited" from="truck_hitbox" to="." method="_on_truck_hitbox_body_exited"]
