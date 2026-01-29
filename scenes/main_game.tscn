@@ -79,9 +79,56 @@ color = Color(0, 0, 0, 0)
 
 [node name="Main Game" type="Node2D"]
 
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Quest UI" parent="CanvasLayer" instance=ExtResource("17_vnsdt")]
+mouse_filter = 1
+
 [node name="Main Map" parent="." instance=ExtResource("1_ipu61")]
 scale = Vector2(0.4, 0.4)
 metadata/_edit_lock_ = true
+
+[node name="Locations" type="Node2D" parent="."]
+
+[node name="Blacksmith" parent="Locations" instance=ExtResource("6_ygxny")]
+position = Vector2(4223, 358)
+location_res = ExtResource("8_2l77h")
+
+[node name="Castle" parent="Locations" instance=ExtResource("6_ygxny")]
+position = Vector2(642, 169)
+location_res = ExtResource("7_wi4c7")
+
+[node name="Cave" parent="Locations" instance=ExtResource("6_ygxny")]
+position = Vector2(6526, 641)
+location_res = ExtResource("8_nqdth")
+
+[node name="Dock" parent="Locations" instance=ExtResource("6_ygxny")]
+position = Vector2(358.00003, 4739)
+location_res = ExtResource("10_wjob3")
+
+[node name="Farm" parent="Locations" instance=ExtResource("6_ygxny")]
+position = Vector2(2403, 443.00006)
+location_res = ExtResource("11_8xp80")
+
+[node name="Fountain" parent="Locations" instance=ExtResource("6_ygxny")]
+position = Vector2(2913.0005, 1985.9999)
+location_res = ExtResource("9_nqdth")
+
+[node name="Guild" parent="Locations" instance=ExtResource("6_ygxny")]
+position = Vector2(6014, 3007)
+location_res = ExtResource("13_sp04v")
+
+[node name="Libary" parent="Locations" instance=ExtResource("6_ygxny")]
+position = Vector2(3946, 2909.0002)
+location_res = ExtResource("14_sp04v")
+
+[node name="Lumberjack" parent="Locations" instance=ExtResource("6_ygxny")]
+position = Vector2(6605, 5058)
+location_res = ExtResource("15_ihbck")
+
+[node name="Marketplace" parent="Locations" instance=ExtResource("6_ygxny")]
+position = Vector2(1268.0005, 3428)
+location_res = ExtResource("16_ihbck")
 
 [node name="Player" parent="." instance=ExtResource("2_ygxny")]
 position = Vector2(2901, 2273)
@@ -196,7 +243,6 @@ script = ExtResource("4_ikqpi")
 
 [node name="PauseMenu" type="Control" parent="Player/CanvasLayer4"]
 process_mode = 3
-visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_left = 50.0
@@ -265,62 +311,6 @@ theme_override_styles/disabled = SubResource("StyleBoxEmpty_4e2rb")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6vdpn")
 icon = ExtResource("10_5wboo")
 script = ExtResource("5_2l77h")
-
-[node name="Locations" type="Node2D" parent="."]
-
-[node name="Blacksmith" parent="Locations" instance=ExtResource("6_ygxny")]
-position = Vector2(4223, 358)
-scale = Vector2(10, 10)
-location_res = ExtResource("8_2l77h")
-
-[node name="Castle" parent="Locations" instance=ExtResource("6_ygxny")]
-position = Vector2(642, 169)
-scale = Vector2(10, 10)
-location_res = ExtResource("7_wi4c7")
-
-[node name="Cave" parent="Locations" instance=ExtResource("6_ygxny")]
-position = Vector2(6526, 641)
-scale = Vector2(10, 10)
-location_res = ExtResource("8_nqdth")
-
-[node name="Dock" parent="Locations" instance=ExtResource("6_ygxny")]
-position = Vector2(358.00003, 4739)
-scale = Vector2(10, 10)
-location_res = ExtResource("10_wjob3")
-
-[node name="Farm" parent="Locations" instance=ExtResource("6_ygxny")]
-position = Vector2(2403, 443.00006)
-scale = Vector2(10, 10)
-location_res = ExtResource("11_8xp80")
-
-[node name="Fountain" parent="Locations" instance=ExtResource("6_ygxny")]
-position = Vector2(2913.0005, 1985.9999)
-scale = Vector2(10, 10)
-location_res = ExtResource("9_nqdth")
-
-[node name="Guild" parent="Locations" instance=ExtResource("6_ygxny")]
-position = Vector2(6014, 3007)
-scale = Vector2(10, 10)
-location_res = ExtResource("13_sp04v")
-
-[node name="Libary" parent="Locations" instance=ExtResource("6_ygxny")]
-position = Vector2(3946, 2909.0002)
-scale = Vector2(10, 10)
-location_res = ExtResource("14_sp04v")
-
-[node name="Lumberjack" parent="Locations" instance=ExtResource("6_ygxny")]
-position = Vector2(6605, 5058)
-scale = Vector2(10, 10)
-location_res = ExtResource("15_ihbck")
-
-[node name="Marketplace" parent="Locations" instance=ExtResource("6_ygxny")]
-position = Vector2(1268.0005, 3428)
-scale = Vector2(10, 10)
-location_res = ExtResource("16_ihbck")
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="Quest UI" parent="CanvasLayer" instance=ExtResource("17_vnsdt")]
 
 [connection signal="pressed" from="Player/CanvasLayer4/PauseMenu/Panel/VBoxContainer/resumeBtn" to="Player/CanvasLayer4/PauseMenu" method="_on_resume_btn_pressed"]
 [connection signal="pressed" from="Player/CanvasLayer4/PauseMenu/Panel/VBoxContainer/optionsBtn" to="Player/CanvasLayer4/PauseMenu" method="_on_options_btn_pressed"]
