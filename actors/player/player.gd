@@ -55,11 +55,12 @@ func _ready() -> void:
 
 # -----------------------
 func _physics_process(delta: float) -> void:
-	var throttle := Input.get_action_strength("ui_up") - Input.get_action_strength("ui_down")
-	var steering := Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+	var throttle := Input.get_action_strength("car_forward") - Input.get_action_strength("car_reverse")
+	var steering := Input.get_action_strength("car_right") - Input.get_action_strength("car_left")
+
 	
 	
-	var gas_reduction := (Input.get_action_strength("ui_up")  + Input.get_action_strength("ui_down"))
+	var gas_reduction := (Input.get_action_strength("car_forward")  + Input.get_action_strength("car_reverse"))
 	reduce_gas += gas_reduction
 	#print(reduce_gas)
 	#var reduce :=  100 - throttle
