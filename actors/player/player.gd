@@ -6,6 +6,8 @@ extends CharacterBody2D
 @onready var durability_bar := $CanvasLayer3/VBoxContainer/DurabilityBar
 @onready var boost_bar := $CanvasLayer3/VBoxContainer/BoostLabel
 @onready var shield_bar := $CanvasLayer3/VBoxContainer/ShieldLabel
+@onready var load_sprite: Sprite2D = $"Truck Sprite/Load Sprite"
+@onready var gas_bar := $CanvasLayer3/VBoxContainer/Gas
 
 
 # --- Movement ---
@@ -14,28 +16,39 @@ extends CharacterBody2D
 @export var friction: float = 800.0
 @export var turn_speed: float = 2.0
 @export var reverse_speed: float = 100.0
+@export var reduce_gas: float = 0.0
+@export var is_gas_gone: bool = false
 
 # --- Player Stats ---
 var stats := {
 	"durability": 100.0,   # vehicle health
 	"boost": 0.0,          # speed multiplier
-	"shield": 0.0          # damage reduction (0–1)
+	"shield": 0.0,          # damage reduction (0–1)
+	"gas": 1500.0
 }
 
 # --- Quest ---
-var current_quest: Quest
+signal quest_changed(quest)
+var current_quest: Quest = null:
+	get:
+		return current_quest
+	set(quest):
+		quest_changed.emit(quest)
+		current_quest = quest
 var is_quest_completed := false
 
 # -----------------------
 func _ready() -> void:
 	# Example quest load
 	current_quest = preload("uid://c1k3rjn6sjhj3")
+	current_quest.changed.connect(_on_current_quest_changed)
 	print("Current Quest: " + current_quest.name)
 
 	# Initialize UI max values
 	durability_bar.max_value = 100
 	boost_bar.max_value = 100
 	shield_bar.max_value = 100
+	gas_bar.max_value = 1500.0
 
 	# Initial UI update
 	_update_ui()
@@ -44,7 +57,16 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	var throttle := Input.get_action_strength("ui_up") - Input.get_action_strength("ui_down")
 	var steering := Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+	
+	
+	var gas_reduction := (Input.get_action_strength("ui_up")  + Input.get_action_strength("ui_down"))
+	reduce_gas += gas_reduction
+	#print(reduce_gas)
+	#var reduce :=  100 - throttle
+	#print(gas_reduction)
 
+	
+	
 	# Rotate only if moving
 	if velocity.length() > 5:
 		rotation += steering * turn_speed * delta
@@ -53,28 +75,37 @@ func _physics_process(delta: float) -> void:
 
 	# Apply boost multiplier
 	var effective_max_speed: float = max_speed * (1.0 + stats["boost"])
-
 	# Accelerate
+	if reduce_gas >= 1500.0:
+		throttle = 0
+		
 	if throttle != 0:
 		var target_speed = effective_max_speed if throttle > 0 else reverse_speed
 		velocity = velocity.move_toward(
 			forward * target_speed * throttle,
 			acceleration * delta
 		)
+		
 	else:
 		# Natural slowdown
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
+	
+	
+	
 
 	move_and_slide()
-
+	
 	# Update HUD every frame
 	_update_ui()
+	
+	
 
 # -----------------------
 func _update_ui() -> void:
 	durability_bar.value = stats["durability"]
 	boost_bar.value = stats["boost"] * 100      # 0.0–1.0 -> 0–100%
 	shield_bar.value = stats["shield"] * 100
+	gas_bar.value = stats["gas"] - reduce_gas
 
 # -----------------------
 # Example skill / stat functions
@@ -104,6 +135,15 @@ func apply_damage(amount: float) -> void:
 	if stats["durability"] <= 0:
 		print("Vehicle Destroyed!")
 
+
+
+
+#func reduce_gas():
+	#gas_bar.value = gas_bar["gas"] -1
+	#print('ddd')
+	#_update_ui()
+
+
 # -----------------------
 # Quest functions (example placeholders)
 func generate_quest(_prev_loc: Location) -> void:
@@ -112,9 +152,24 @@ func generate_quest(_prev_loc: Location) -> void:
 
 func on_location_arrived(location: Location) -> void:
 	if current_quest != null:
-		if current_quest.location == location:
+		# Start quest upon arriving ang starting location
+		if current_quest.status == Quest.QuestStatus.READY and current_quest.starting_location == location:
+			current_quest.status = Quest.QuestStatus.ONGOING
+			if current_quest.type == Quest.QuestType.DELIVERY:
+				load_sprite.visible = true
+			else:
+				load_sprite.visible = false
+			print("Quest started")
+		# End the quest
+		elif current_quest.status == Quest.QuestStatus.ONGOING and current_quest.end_location == location:
 			is_quest_completed = true
+			current_quest.status = Quest.QuestStatus.FINISHED
+			load_sprite.visible = false
 			print("Quest Completed!")
 			current_quest = null
 			# Generate new quest
 			generate_quest(location)
+
+# Emit signal to update quest UI
+func _on_current_quest_changed():
+	quest_changed.emit(current_quest)
