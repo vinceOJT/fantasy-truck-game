@@ -28,6 +28,7 @@ var stats := {
 }
 
 # --- Quest ---
+var quest_manager: QuestManager
 signal quest_changed(quest)
 var current_quest: Quest = null:
 	get:
@@ -35,14 +36,14 @@ var current_quest: Quest = null:
 	set(quest):
 		quest_changed.emit(quest)
 		current_quest = quest
-var is_quest_completed := false
+
 
 # -----------------------
 func _ready() -> void:
-	# Example quest load
-	current_quest = preload("uid://c1k3rjn6sjhj3")
-	current_quest.changed.connect(_on_current_quest_changed)
-	print("Current Quest: " + current_quest.name)
+	# Generate first quest
+	quest_manager = QuestManager.new()
+	current_quest = quest_manager.generate_new_quest(null)
+	current_quest.changed.connect(_on_current_quest_changed)	
 
 	# Initialize UI max values
 	durability_bar.max_value = 100
@@ -52,6 +53,7 @@ func _ready() -> void:
 
 	# Initial UI update
 	_update_ui()
+
 
 # -----------------------
 func _physics_process(delta: float) -> void:
@@ -143,13 +145,7 @@ func apply_damage(amount: float) -> void:
 	#print('ddd')
 	#_update_ui()
 
-
-# -----------------------
-# Quest functions (example placeholders)
-func generate_quest(_prev_loc: Location) -> void:
-	# Generate a random location that is not the previous location
-	pass
-
+# Called when player enters a Location Area2D
 func on_location_arrived(location: Location) -> void:
 	if current_quest != null:
 		# Start quest upon arriving ang starting location
@@ -160,15 +156,16 @@ func on_location_arrived(location: Location) -> void:
 			else:
 				load_sprite.visible = false
 			print("Quest started")
+
 		# End the quest
 		elif current_quest.status == Quest.QuestStatus.ONGOING and current_quest.end_location == location:
-			is_quest_completed = true
 			current_quest.status = Quest.QuestStatus.FINISHED
 			load_sprite.visible = false
 			print("Quest Completed!")
-			current_quest = null
+			
 			# Generate new quest
-			generate_quest(location)
+			current_quest = quest_manager.generate_new_quest(location)
+			current_quest.changed.connect(_on_current_quest_changed)
 
 # Emit signal to update quest UI
 func _on_current_quest_changed():
