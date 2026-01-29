@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://bf88h4dl8rw15"]
+
+[ext_resource type="Script" uid="uid://baq4oc5bgo7ea" path="res://actors/slime/slime_script.gd" id="1_qfp8a"]
+[ext_resource type="Texture2D" uid="uid://cnwvp1cxumfvu" path="res://assets/monsters/slime.png" id="2_ypj56"]
+[ext_resource type="Script" uid="uid://dsf2wq2oyisf5" path="res://actors/slime/detection_area.gd" id="3_vbgn4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fe133"]
+radius = 85.00588
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0iob3"]
+radius = 10.049875
+
+[node name="slime" type="CharacterBody2D"]
+script = ExtResource("1_qfp8a")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-0.31250405, -0.8749972)
+scale = Vector2(0.091748804, 0.08290819)
+texture = ExtResource("2_ypj56")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("3_vbgn4")
+metadata/_custom_type_script = "uid://deodenqv61b3v"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+position = Vector2(-1, 0)
+shape = SubResource("CircleShape2D_fe133")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, -1)
+shape = SubResource("CircleShape2D_0iob3")
+debug_color = Color(0.975076, 0.15867859, 0.024793882, 0.41960785)
+
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]

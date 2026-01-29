@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://0a4sac7166s3"]
+[gd_scene load_steps=44 format=3 uid="uid://0a4sac7166s3"]
 
 [ext_resource type="PackedScene" uid="uid://bdkumy0hsg5qy" path="res://scenes/main_map.tscn" id="1_ipu61"]
 [ext_resource type="PackedScene" uid="uid://cadl6hjl3d2cy" path="res://actors/player/player.tscn" id="2_ygxny"]
@@ -23,6 +23,7 @@
 [ext_resource type="Resource" uid="uid://4xiter26ufx3" path="res://data/locations/lumberjack.tres" id="15_ihbck"]
 [ext_resource type="Resource" uid="uid://xv0bnonlvumt" path="res://data/locations/marketplace.tres" id="16_ihbck"]
 [ext_resource type="PackedScene" uid="uid://1a63ja7as1i7" path="res://ui/quest_ui.tscn" id="17_vnsdt"]
+[ext_resource type="PackedScene" uid="uid://bf88h4dl8rw15" path="res://actors/slime/slime.tscn" id="24_cybgu"]
 
 [sub_resource type="GDScript" id="GDScript_74lek"]
 script/source = "extends ProgressBar
@@ -321,6 +322,9 @@ location_res = ExtResource("16_ihbck")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Quest UI" parent="CanvasLayer" instance=ExtResource("17_vnsdt")]
+
+[node name="CharacterBody2D" parent="." instance=ExtResource("24_cybgu")]
+position = Vector2(2744, 2151)
 
 [connection signal="pressed" from="Player/CanvasLayer4/PauseMenu/Panel/VBoxContainer/resumeBtn" to="Player/CanvasLayer4/PauseMenu" method="_on_resume_btn_pressed"]
 [connection signal="pressed" from="Player/CanvasLayer4/PauseMenu/Panel/VBoxContainer/optionsBtn" to="Player/CanvasLayer4/PauseMenu" method="_on_options_btn_pressed"]
