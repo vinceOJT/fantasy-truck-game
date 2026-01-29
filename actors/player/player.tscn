@@ -411,3 +411,10 @@ libraries = {
 }
 
 [node name="Camera2D" type="Camera2D" parent="."]
+process_callback = 0
+limit_left = 0
+limit_top = 0
+limit_right = 7168
+limit_bottom = 5529
+limit_smoothed = true
+position_smoothing_enabled = true
