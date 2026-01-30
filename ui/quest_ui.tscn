@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://1a63ja7as1i7"]
 
 [ext_resource type="Script" uid="uid://b64wr0a2kypds" path="res://ui/quest_ui.gd" id="1_gbaj8"]
-[ext_resource type="Theme" uid="uid://jkrtqbyc7lpg" path="res://ui/theme.tres" id="2_7nj6y"]
+[ext_resource type="Theme" uid="uid://dj6othhcq5418" path="res://ui/theme.tres" id="2_7nj6y"]
 [ext_resource type="FontFile" uid="uid://p4f8eglfukbh" path="res://assets/fonts/ThaleahFat.ttf" id="3_4xvx0"]
 
 [sub_resource type="Gradient" id="Gradient_7nj6y"]
