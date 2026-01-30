@@ -13,7 +13,7 @@ extends CharacterBody2D
 @onready var reverse := $reverse
 
 # --- Movement ---
-@export var max_speed: float = 200.0       # forward speed
+@export var max_speed: float = 200.0 # forward speed
 @export var acceleration: float = 900.0
 @export var friction: float = 800.0
 @export var turn_speed: float = 2.0
@@ -23,13 +23,14 @@ extends CharacterBody2D
 
 # --- Player Stats ---
 var stats := {
-	"durability": 100.0,   # vehicle health
-	"boost": 0.0,          # speed multiplier
-	"shield": 0.0,          # damage reduction (0–1)
+	"durability": 100.0, # vehicle health
+	"boost": 0.0, # speed multiplier
+	"shield": 0.0, # damage reduction (0–1)
 	"gas": 1500.0
 }
 
 # --- Quest ---
+var quest_manager: QuestManager
 signal quest_changed(quest)
 var current_quest: Quest = null:
 	get:
@@ -37,14 +38,14 @@ var current_quest: Quest = null:
 	set(quest):
 		quest_changed.emit(quest)
 		current_quest = quest
-var is_quest_completed := false
+
 
 # -----------------------
 func _ready() -> void:
-	# Example quest load
-	current_quest = preload("uid://c1k3rjn6sjhj3")
+	# Generate first quest
+	quest_manager = QuestManager.new()
+	current_quest = quest_manager.generate_new_quest(null)
 	current_quest.changed.connect(_on_current_quest_changed)
-	print("Current Quest: " + current_quest.name)
 
 	# Initialize UI max values
 	durability_bar.max_value = 100
@@ -55,15 +56,16 @@ func _ready() -> void:
 	# Initial UI update
 	_update_ui()
 
+
 # -----------------------
 func _physics_process(delta: float) -> void:
-	var throttle := Input.get_action_strength("ui_up") - Input.get_action_strength("ui_down")
-	var steering := Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+	var throttle := Input.get_action_strength("car_forward") - Input.get_action_strength("car_reverse")
+	var steering := Input.get_action_strength("car_right") - Input.get_action_strength("car_left")
 	if throttle > 0:
 		if not engine.playing: engine.play()
 		accel.stop()
 		reverse.stop()
-	elif throttle < 0: 
+	elif throttle < 0:
 		if not reverse.playing: reverse.play()
 		engine.stop()
 		accel.stop()
@@ -73,9 +75,7 @@ func _physics_process(delta: float) -> void:
 		reverse.stop()
 	
 		
-		
-		
-	var gas_reduction := (Input.get_action_strength("ui_up")  + Input.get_action_strength("ui_down"))
+	var gas_reduction := (Input.get_action_strength("car_forward") + Input.get_action_strength("car_reverse"))
 	reduce_gas += gas_reduction
 	
 	print(throttle)
@@ -105,19 +105,16 @@ func _physics_process(delta: float) -> void:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 	
 	
-	
-
 	move_and_slide()
 	
 	# Update HUD every frame
 	_update_ui()
 	
 	
-
 # -----------------------
 func _update_ui() -> void:
 	durability_bar.value = stats["durability"]
-	boost_bar.value = stats["boost"] * 100      # 0.0–1.0 -> 0–100%
+	boost_bar.value = stats["boost"] * 100 # 0.0–1.0 -> 0–100%
 	shield_bar.value = stats["shield"] * 100
 	gas_bar.value = stats["gas"] - reduce_gas
 
@@ -150,20 +147,12 @@ func apply_damage(amount: float) -> void:
 		print("Vehicle Destroyed!")
 
 
-
-
 #func reduce_gas():
 	#gas_bar.value = gas_bar["gas"] -1
 	#print('ddd')
 	#_update_ui()
 
-
-# -----------------------
-# Quest functions (example placeholders)
-func generate_quest(_prev_loc: Location) -> void:
-	# Generate a random location that is not the previous location
-	pass
-
+# Called when player enters a Location Area2D
 func on_location_arrived(location: Location) -> void:
 	if current_quest != null:
 		# Start quest upon arriving ang starting location
@@ -174,15 +163,16 @@ func on_location_arrived(location: Location) -> void:
 			else:
 				load_sprite.visible = false
 			print("Quest started")
+
 		# End the quest
 		elif current_quest.status == Quest.QuestStatus.ONGOING and current_quest.end_location == location:
-			is_quest_completed = true
 			current_quest.status = Quest.QuestStatus.FINISHED
 			load_sprite.visible = false
 			print("Quest Completed!")
-			current_quest = null
+			
 			# Generate new quest
-			generate_quest(location)
+			current_quest = quest_manager.generate_new_quest(location)
+			current_quest.changed.connect(_on_current_quest_changed)
 
 # Emit signal to update quest UI
 func _on_current_quest_changed():
