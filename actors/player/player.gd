@@ -8,10 +8,12 @@ extends CharacterBody2D
 @onready var shield_bar := $CanvasLayer3/VBoxContainer/ShieldLabel
 @onready var load_sprite: Sprite2D = $"Truck Sprite/Load Sprite"
 @onready var gas_bar := $CanvasLayer3/VBoxContainer/Gas
-
+@onready var engine := $engine
+@onready var accel := $forward
+@onready var reverse := $reverse
 
 # --- Movement ---
-@export var max_speed: float = 200.0       # forward speed
+@export var max_speed: float = 200.0 # forward speed
 @export var acceleration: float = 900.0
 @export var friction: float = 800.0
 @export var turn_speed: float = 2.0
@@ -21,9 +23,9 @@ extends CharacterBody2D
 
 # --- Player Stats ---
 var stats := {
-	"durability": 100.0,   # vehicle health
-	"boost": 0.0,          # speed multiplier
-	"shield": 0.0,          # damage reduction (0–1)
+	"durability": 100.0, # vehicle health
+	"boost": 0.0, # speed multiplier
+	"shield": 0.0, # damage reduction (0–1)
 	"gas": 1500.0
 }
 
@@ -43,7 +45,7 @@ func _ready() -> void:
 	# Generate first quest
 	quest_manager = QuestManager.new()
 	current_quest = quest_manager.generate_new_quest(null)
-	current_quest.changed.connect(_on_current_quest_changed)	
+	current_quest.changed.connect(_on_current_quest_changed)
 
 	# Initialize UI max values
 	durability_bar.max_value = 100
@@ -59,17 +61,26 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	var throttle := Input.get_action_strength("car_forward") - Input.get_action_strength("car_reverse")
 	var steering := Input.get_action_strength("car_right") - Input.get_action_strength("car_left")
-
+	if throttle > 0:
+		if not engine.playing: engine.play()
+		accel.stop()
+		reverse.stop()
+	elif throttle < 0:
+		if not reverse.playing: reverse.play()
+		engine.stop()
+		accel.stop()
+	else:
+		if not accel.playing: accel.play()
+		engine.stop()
+		reverse.stop()
 	
-	
-	var gas_reduction := (Input.get_action_strength("car_forward")  + Input.get_action_strength("car_reverse"))
+		
+	var gas_reduction := (Input.get_action_strength("car_forward") + Input.get_action_strength("car_reverse"))
 	reduce_gas += gas_reduction
-	#print(reduce_gas)
+	
+	#print(throttle)
 	#var reduce :=  100 - throttle
-	#print(gas_reduction)
-
-	
-	
+	#print(gas_reduction)S
 	# Rotate only if moving
 	if velocity.length() > 5:
 		rotation += steering * turn_speed * delta
@@ -94,19 +105,16 @@ func _physics_process(delta: float) -> void:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 	
 	
-	
-
 	move_and_slide()
 	
 	# Update HUD every frame
 	_update_ui()
 	
 	
-
 # -----------------------
 func _update_ui() -> void:
 	durability_bar.value = stats["durability"]
-	boost_bar.value = stats["boost"] * 100      # 0.0–1.0 -> 0–100%
+	boost_bar.value = stats["boost"] * 100 # 0.0–1.0 -> 0–100%
 	shield_bar.value = stats["shield"] * 100
 	gas_bar.value = stats["gas"] - reduce_gas
 
@@ -137,8 +145,6 @@ func apply_damage(amount: float) -> void:
 	_update_ui()
 	if stats["durability"] <= 0:
 		print("Vehicle Destroyed!")
-
-
 
 
 #func reduce_gas():
